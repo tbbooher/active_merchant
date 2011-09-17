@@ -71,6 +71,18 @@ module ActiveMerchant #:nodoc:
         end
       end
 
+      def create_subscription(credit_card_or_reference, options = {})
+        money = amount(0)
+        case normalize(credit_card_or_reference)
+        when '1'
+          Response.new(true, SUCCESS_MESSAGE, {:paid_amount => money}, :test => true)
+        when '2'
+          Response.new(false, FAILURE_MESSAGE, {:paid_amount => money, :error => FAILURE_MESSAGE },:test => true)
+        else
+          raise Error, ERROR_MESSAGE
+        end        
+      end
+
       def refund(money, reference, options = {})
         money = amount(money)
         case reference
